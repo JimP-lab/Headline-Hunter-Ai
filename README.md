@@ -13,6 +13,7 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase
 
 # NewsApi
 https://newsapi.org/
