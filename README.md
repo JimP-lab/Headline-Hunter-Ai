@@ -14,6 +14,7 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 - Supabase
+- NewsApi
 
 # NewsApi
 https://newsapi.org/
