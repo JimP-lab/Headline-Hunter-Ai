@@ -1,5 +1,5 @@
 # Headline-Hunter ai
-headline hunter is an ai powered that scrapes the latest news by using the api of news.org
+headline hunter is an ai powered tool that scrapes the latest news by using the api of news.org
 
 # Preview 
 https://headline-hunter-ai.lovable.app/
