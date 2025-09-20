@@ -83,8 +83,8 @@ const Index = () => {
               <SearchBar onScrapeComplete={handleScrapeComplete} />
             </div>
 
-            {/* Sign up CTA */}
-            <div className="text-center">
+            {/* Sign up CTA (hidden to remove visible text/button but preserved in code) */}
+            <div className="text-center hidden">
               <p className="text-sm text-muted-foreground mb-4">
                 Want unlimited scraping? Sign up for a free account
               </p>
