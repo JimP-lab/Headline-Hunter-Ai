@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import { Search, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Loader2, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 
 interface SearchBarProps {
   onScrapeComplete: (articles: any[]) => void;
@@ -13,7 +15,35 @@ interface SearchBarProps {
 export const SearchBar = ({ onScrapeComplete }: SearchBarProps) => {
   const [keyword, setKeyword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [usageCount, setUsageCount] = useState(0);
+  const [user, setUser] = useState(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Load usage count and check authentication on component mount
+  useEffect(() => {
+    // Check if user is authenticated
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
+    // Load usage count from localStorage for anonymous users
+    const savedUsage = localStorage.getItem('anonymous_scrape_count');
+    setUsageCount(savedUsage ? parseInt(savedUsage, 10) : 0);
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+      
+      // Reset usage count when user logs in
+      if (session?.user) {
+        localStorage.removeItem('anonymous_scrape_count');
+        setUsageCount(0);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSearch = async () => {
     if (!keyword.trim()) {
@@ -25,15 +55,26 @@ export const SearchBar = ({ onScrapeComplete }: SearchBarProps) => {
       return;
     }
 
+    // Check usage limit for anonymous users
+    if (!user && usageCount >= 5) {
+      toast({
+        title: "Usage limit reached",
+        description: "Create a free account to continue scraping unlimited news!",
+        variant: "default",
+      });
+      navigate('/auth');
+      return;
+    }
+
     setIsLoading(true);
     try {
-      // Create a scrape session (anonymous for now)
+      // Create a scrape session
       const { data: scrapeData, error: scrapeError } = await supabase
         .from('scrapes')
         .insert({
           keyword: keyword.trim(),
           source: 'general',
-          user_id: null, // Anonymous scrape
+          user_id: user?.id || null, // Use user ID if authenticated, null if anonymous
         })
         .select()
         .single();
@@ -51,6 +92,13 @@ export const SearchBar = ({ onScrapeComplete }: SearchBarProps) => {
       if (error) throw error;
 
       onScrapeComplete(data.articles || []);
+      
+      // Update usage count for anonymous users
+      if (!user) {
+        const newUsageCount = usageCount + 1;
+        setUsageCount(newUsageCount);
+        localStorage.setItem('anonymous_scrape_count', newUsageCount.toString());
+      }
       
       toast({
         title: "News scraped successfully!",
@@ -93,30 +141,62 @@ export const SearchBar = ({ onScrapeComplete }: SearchBarProps) => {
               disabled={isLoading}
             />
           </div>
-          <Button 
-            onClick={handleSearch} 
-            disabled={isLoading || !keyword.trim()}
-            className="h-12 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-glow"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Scraping...
-              </>
-            ) : (
-              <>
-                <Search className="mr-2 h-4 w-4" />
-                Scrape News
-              </>
+          <div className="flex items-center gap-3">
+            {!user && (
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant={usageCount >= 5 ? "destructive" : usageCount >= 3 ? "secondary" : "default"} 
+                  className="text-sm px-3 py-1"
+                >
+                  {usageCount}/5 scrapes
+                </Badge>
+              </div>
             )}
-          </Button>
+            <Button 
+              onClick={handleSearch} 
+              disabled={isLoading || !keyword.trim()}
+              className="h-12 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-glow whitespace-nowrap"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Scraping...
+                </>
+              ) : (
+                <>
+                  <Search className="mr-2 h-4 w-4" />
+                  Scrape News
+                </>
+              )}
+            </Button>
+          </div>
         </div>
 
         <div className="text-center text-sm text-muted-foreground">
-          <div className="flex items-center justify-center gap-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            Free tokens available - No signup required
-          </div>
+          {user ? (
+            <div className="flex items-center justify-center gap-2">
+              <User className="h-4 w-4 text-green-500" />
+              <span>Welcome back! Unlimited scraping available</span>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex items-center justify-center gap-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Free tokens available - No signup required</span>
+              </div>
+              {usageCount >= 3 && (
+                <div className="text-xs text-accent">
+                  {usageCount >= 5 ? 'Limit reached! ' : `${5 - usageCount} scrapes remaining. `}
+                  <button 
+                    onClick={() => navigate('/auth')} 
+                    className="underline hover:text-primary transition-colors"
+                  >
+                    Sign up for unlimited access
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </Card>

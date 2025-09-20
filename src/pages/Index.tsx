@@ -88,7 +88,11 @@ const Index = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Want unlimited scraping? Sign up for a free account
               </p>
-              <Button variant="outline" className="hover:bg-primary hover:text-primary-foreground">
+              <Button 
+                variant="outline" 
+                className="hover:bg-primary hover:text-primary-foreground"
+                onClick={() => window.location.href = '/auth'}
+              >
                 Create Free Account
               </Button>
             </div>
