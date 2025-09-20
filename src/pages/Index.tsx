@@ -82,24 +82,7 @@ const Index = () => {
             <div className="mb-8">
               <SearchBar onScrapeComplete={handleScrapeComplete} />
             </div>
-
-            {/* Sign up CTA (hidden to remove visible text/button but preserved in code) */}
-            <div className="text-center hidden">
-              <p className="text-sm text-muted-foreground mb-4">
-                Want unlimited scraping? Sign up for a free account
-              </p>
-              <Button 
-                variant="outline" 
-                className="hover:bg-primary hover:text-primary-foreground"
-                onClick={() => window.location.href = '/auth'}
-              >
-                Create Free Account
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+            
       {/* Articles Section */}
       <div className="container mx-auto px-4 pb-16">
         <ArticleGrid articles={articles} isLoading={isLoading} />
