@@ -2,7 +2,7 @@
 Headline Hunter is an ai powered tool that scrapes the latest news by using the api of newsapi.org
 
 # Preview 
-https://headline-hunter-ai.lovable.app/
+https://headline-hunter-ai.lovable.app
 
 ## What technologies are used for this project?
 
