@@ -100,6 +100,40 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Video Demo Section */}
+      <div className="container mx-auto px-4 py-16 lg:py-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-4">
+            See It In Action
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Watch how easy it is to discover the latest news with AI-powered scraping
+          </p>
+        </div>
+        
+        <div className="relative max-w-5xl mx-auto">
+          {/* Decorative background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 blur-3xl -z-10 transform scale-95"></div>
+          
+          {/* Video container */}
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-border/50 bg-card">
+            <video 
+              className="w-full h-auto"
+              controls
+              poster="/placeholder.svg"
+              preload="metadata"
+            >
+              <source src="/demo-video.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          
+          {/* Decorative elements */}
+          <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
+        </div>
+      </div>
+
       {/* Articles Section */}
       <div className="container mx-auto px-4 pb-16">
         <ArticleGrid articles={articles} isLoading={isLoading} />
