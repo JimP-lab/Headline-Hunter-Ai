@@ -41,8 +41,9 @@ const Index = () => {
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Discover the latest news on any topic with our AI-powered scraping technology. 
-              Get real-time articles from trusted sources worldwide.
+              Professional news scraping tool for automated news analysis. Scrape financial news, 
+              monitor industry trends, and track competitor news across trusted sources worldwide 
+              with our AI-powered technology.
             </p>
 
             {/* Feature highlights */}
@@ -51,9 +52,9 @@ const Index = () => {
                 <div className="p-2 rounded-lg bg-primary/10 mb-3">
                   <Zap className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">AI-Powered</h3>
+                <h3 className="font-semibold mb-2">Automated News Analysis</h3>
                 <p className="text-sm text-muted-foreground">
-                  Advanced algorithms find the most relevant articles
+                  AI-powered algorithms for intelligent news scraping and analysis
                 </p>
               </div>
               
@@ -61,9 +62,9 @@ const Index = () => {
                 <div className="p-2 rounded-lg bg-accent/10 mb-3">
                   <Clock className="h-6 w-6 text-accent" />
                 </div>
-                <h3 className="font-semibold mb-2">Real-time</h3>
+                <h3 className="font-semibold mb-2">Industry Trend Monitoring</h3>
                 <p className="text-sm text-muted-foreground">
-                  Get the latest news as it happens
+                  Track competitor news and monitor industry trends in real-time
                 </p>
               </div>
               
@@ -71,9 +72,9 @@ const Index = () => {
                 <div className="p-2 rounded-lg bg-primary/10 mb-3">
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">Free to Try</h3>
+                <h3 className="font-semibold mb-2">Financial News Scraping</h3>
                 <p className="text-sm text-muted-foreground">
-                  No signup required - start scraping immediately
+                  Scrape financial news and market data - no signup required
                 </p>
               </div>
             </div>
